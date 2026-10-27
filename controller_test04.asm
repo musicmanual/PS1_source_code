@@ -82,15 +82,15 @@ JoyData equ UserRam+0x200
     li a2,JoyData+0x30
     li a3,0x22
 
-    jalr t0
+    jalr t0 ;0x8001008C
     nop
 
     ; B(13h): StartPad
     li t0,0xB0
     li t1,0x13
 
-    jalr t0
-    nop
+    jalr t0	;0x8001009C
+    nop	
 
 ; ============================================================
 ; MAIN LOOP
@@ -99,7 +99,7 @@ JoyData equ UserRam+0x200
 MainLoop:
 
     ; Small delay
-    li t0,0x8000
+    li t0,0x8000	;0x8001009C
 
 DelayLoop:
     addiu t0,t0,-1
@@ -110,7 +110,7 @@ DelayLoop:
 ; CHECK DIGITAL BUTTONS
 ; ============================================================
 
-    li t0,JoyData
+    li t0,JoyData	;0x800100AC
 
     ; Read both digital button bytes
     lhu t1,2(t0)
@@ -118,7 +118,7 @@ DelayLoop:
 
     ; If any digital button is pressed, show circle
     li t2,0xFFFF
-    bne t1,t2,ShowCircle
+    bne t1,t2,ShowCircle	;0x8001012c
     nop
 
 ; ============================================================
@@ -193,14 +193,14 @@ DelayLoop:
 ; ANY BUTTON PRESSED OR RIGHT STICK MOVED
 ; ============================================================
 
-ShowCircle:
+ShowCircle:	;0x8001012C
 
     li a0,0x02000000
-    jal CLS
-    nop
+    jal CLS		;0x80010164
+    nop			;0x80010138
 
-    jal DrawCircle
-    nop
+    jal DrawCircle		;0x800101c4
+    nop					;0x8001013C
 
     j MainLoop
     nop
@@ -225,7 +225,7 @@ ShowTriangle:
 ; CLS: CLEAR SCREEN TO BLACK
 ; ============================================================
 
-CLS:
+CLS:	;0x80010164
 
     lui a1,0x1F80
 
@@ -247,7 +247,7 @@ CLS:
 ; DRAW YELLOW TRIANGLE
 ; ============================================================
 
-DrawTriangle:
+DrawTriangle:		
 
     lui t4,0x1F80
 
@@ -276,7 +276,7 @@ DrawTriangle:
 ; Center = (160,120)
 ; ============================================================
 
-DrawCircle:
+DrawCircle:		;0x800101c4
 
     lui t4,0x1F80
 
